@@ -11,7 +11,6 @@ import {
   useHighlightColor,
 } from './hooks';
 import { useGeneralSettings } from '@irdashies/context';
-import { useLapTimesStoreUpdater } from '../../context/LapTimesStore/LapTimesStoreUpdater';
 import { usePitLapStoreUpdater } from '../../context/PitLapStore/PitLapStoreUpdater';
 import {
   useDrivingState,
@@ -26,9 +25,6 @@ export const Standings = () => {
   const generalSettings = useGeneralSettings();
   const { isDriving } = useDrivingState();
   const isSessionVisible = useSessionVisibility(settings?.sessionVisibility);
-
-  // Update lap times store with telemetry data (only for this overlay)
-  useLapTimesStoreUpdater();
 
   // Update pit laps
   usePitLapStoreUpdater();

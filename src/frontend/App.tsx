@@ -13,6 +13,7 @@ import { Settings } from './components/Settings/Settings';
 import { ThemeManager } from './components/ThemeManager/ThemeManager';
 import { HideUIWrapper } from './components/HideUIWrapper/HideUIWrapper';
 import { OverlayContainer } from './components/OverlayContainer';
+import { useLapTimesStoreUpdater } from './context/LapTimesStore/LapTimesStoreUpdater';
 
 /**
  * Check if this window is the settings window based on URL hash
@@ -47,6 +48,12 @@ const OverlayApp = () => {
   );
 };
 
+const LapTimesStoreUpdater = () => {
+  // Update lap times store with telemetry data
+  useLapTimesStoreUpdater();
+  return null;
+};
+
 const App = () => {
   const isSettings = isSettingsWindow();
 
@@ -65,6 +72,7 @@ const App = () => {
         <TelemetryProvider bridge={window.irsdkBridge} />
         <PitLaneProvider bridge={window.pitLaneBridge} />
         <ReferenceStoreProvider bridge={window.referenceLapsBridge} />
+        <LapTimesStoreUpdater />
         <OverlayApp />
       </RunningStateProvider>
     </DashboardProvider>
