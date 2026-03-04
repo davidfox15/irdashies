@@ -1,12 +1,12 @@
 import { useDashboard } from '@irdashies/context';
 import { LapTimeLogWidgetSettings } from '../../Settings/types';
 
-export const useLapTimeLog = () => {
+export const useLapTimeLogSettings = () => {
   const { currentDashboard } = useDashboard();
 
-  const sectorsTimeLogSettings = currentDashboard?.widgets.find(
-    (widget) => widget.id === 'lapTimeLog'
+  const lapTimeLogSettings = currentDashboard?.widgets.find(
+    (widget) => widget.id === 'laptimelog'
   )?.config;
 
-  return sectorsTimeLogSettings as LapTimeLogWidgetSettings['config'];
+  return lapTimeLogSettings as LapTimeLogWidgetSettings['config'];
 };

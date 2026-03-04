@@ -1,19 +1,14 @@
 import { useFocusCarIdx, useGeneralSettings } from '@irdashies/context';
-import { useLapTimeLog } from './hooks/useLapTimeLog';
+import { useLapTimeLogSettings } from './hooks/useLapTimeLog';
 import { LapInfoRow } from './components/LapInfoRow/LapInfoRow';
-import { useLapTimeHistory } from '../../context/LapTimesStore/LapTimesStore';
-import { useMemo } from 'react';
 import { formatTime } from '@irdashies/utils/time';
+import { useDriverLapTimeHistory } from 'src/frontend/context/LapTimesStore/LapTimesStore';
 
 export const LapTimeLog = () => {
-  const settings = useLapTimeLog();
+  const settings = useLapTimeLogSettings();
   const generalSettings = useGeneralSettings();
   const driverCarIdx = useFocusCarIdx();
-  const lapTimeHistory = useLapTimeHistory();
-  const driverLaps = useMemo(() => {
-    if (driverCarIdx !== undefined) return lapTimeHistory[driverCarIdx];
-    return [];
-  }, [driverCarIdx, lapTimeHistory]);
+  const driverLapTimeHistory = useDriverLapTimeHistory(driverCarIdx);
 
   const tableBorderSpacing = generalSettings?.compactMode
     ? 'border-spacing-y-0'
@@ -34,9 +29,9 @@ export const LapTimeLog = () => {
       <table
         className={`w-full table-auto text-sm border-separate ${tableBorderSpacing}`}
       >
-        {driverLaps && (
+        {driverLapTimeHistory && (
           <tbody>
-            {driverLaps.map((time, index) => {
+            {driverLapTimeHistory.map((time, index) => {
               // TODO: settigns.timeFormat
               const timeStr = formatTime(time, 'full');
               return (

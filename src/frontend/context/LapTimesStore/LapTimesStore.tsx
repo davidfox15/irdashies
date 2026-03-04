@@ -182,3 +182,10 @@ export const useLapTimeHistory = (): number[][] => {
     return lastSeenHistory;
   });
 };
+
+export const useDriverLapTimeHistory = (driverCarIdx?: number): number[] => {
+  const lapTimeHistory = useLapTimeHistory();
+  if (driverCarIdx !== undefined && lapTimeHistory[driverCarIdx])
+    return lapTimeHistory[driverCarIdx];
+  return [];
+};
