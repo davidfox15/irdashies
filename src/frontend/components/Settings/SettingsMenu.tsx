@@ -121,6 +121,14 @@ export const SettingsMenu = () => {
             Weather
           </Link>
         </li>
+        <li>
+          <Link
+            to="/settings/laptimelog"
+            className={menuItemClass('/laptimelog')}
+          >
+            Lap time log
+          </Link>
+        </li>
       </ul>
       {/* Advanced settings pushed to bottom */}
       <ul className="mt-auto pt-2 border-t border-slate-700 flex flex-col gap-2">

@@ -3,6 +3,7 @@ import { StandingsSettings } from './sections/StandingsSettings';
 import { RelativeSettings } from './sections/RelativeSettings';
 import { WeatherSettings } from './sections/WeatherSettings';
 import { TrackMapSettings } from './sections/TrackMapSettings';
+import { LapTimeLogSettings } from './sections/LapTimeLogSettings';
 import { FlatTrackMapSettings } from './sections/FlatTrackMapSettings';
 import { AdvancedSettings } from './sections/AdvancedSettings';
 import { InputSettings } from './sections/InputSettings';
@@ -64,6 +65,8 @@ export const SettingsLoader = () => {
       return <FlagSettings />;
     case 'twitchchat':
       return <TwitchChatSettings />;
+    case 'laptimelog':
+      return <LapTimeLogSettings />;
     default:
       return widget ? (
         <div className="text-red-400">No settings available for {type}</div>

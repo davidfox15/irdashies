@@ -12,6 +12,7 @@ import { RejoinIndicator } from './components/RejoinIndicator/RejoinIndicator';
 import { TelemetryInspector } from './components/TelemetryInspector/TelemetryInspector';
 import { PitlaneHelper } from './components/PitlaneHelper/PitlaneHelper';
 import { Flag } from './components/Flag';
+import { LapTimeLog } from './components/LapTimeLog';
 import { TwitchChat } from './components/TwitchChat/TwitchChat';
 
 // TODO: type this better, right now the config comes from settings
@@ -36,6 +37,7 @@ export const WIDGET_MAP: Record<
   pitlanehelper: PitlaneHelper,
   flag: Flag,
   twitchchat: TwitchChat,
+  lapTimeLog: LapTimeLog,
 };
 
 export type WidgetId = keyof typeof WIDGET_MAP;

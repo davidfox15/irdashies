@@ -329,6 +329,7 @@ export async function startComponentServer(
         'blindspotmonitor',
         'garagecover',
         'rejoin',
+        'lapTimeLog',
       ];
 
       sendJSON(res, 200, {

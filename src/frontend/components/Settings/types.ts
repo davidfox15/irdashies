@@ -618,3 +618,13 @@ export interface ShiftPointSettings {
     }
   >;
 }
+
+export interface LapTimeLogWidgetSettings extends BaseWidgetSettings {
+  id: 'lapTimeLog';
+  config: {
+    enabled: boolean;
+    showLabel: boolean;
+    sessionVisibility: SessionVisibilitySettings;
+    background: { opacity: number };
+  };
+}

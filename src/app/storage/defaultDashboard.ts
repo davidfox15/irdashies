@@ -856,6 +856,27 @@ export const defaultDashboard: DashboardLayout = {
         },
       },
     },
+    {
+      id: 'lapTimeLog',
+      enabled: true,
+      layout: {
+        x: 378,
+        y: 102,
+        width: 400,
+        height: 500,
+      },
+      config: {
+        enabled: true,
+        showLabel: true,
+        sessionVisibility: {
+          race: true,
+          loneQualify: true,
+          openQualify: true,
+          practice: true,
+          offlineTesting: true,
+        },
+      },
+    },
   ],
   generalSettings: {
     fontSize: 'sm',
