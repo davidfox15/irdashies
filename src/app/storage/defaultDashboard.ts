@@ -868,6 +868,7 @@ export const defaultDashboard: DashboardLayout = {
       config: {
         enabled: true,
         showLabel: true,
+        background: { opacity: 80 },
         sessionVisibility: {
           race: true,
           loneQualify: true,

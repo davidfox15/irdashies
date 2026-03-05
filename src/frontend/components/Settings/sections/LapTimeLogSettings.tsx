@@ -24,7 +24,7 @@ const defaultConfig: LapTimeLogWidgetSettings['config'] = {
     practice: true,
     offlineTesting: true,
   },
-  background: { opacity: 0.7 },
+  background: { opacity: 80 },
 };
 
 const migrateConfig = (
