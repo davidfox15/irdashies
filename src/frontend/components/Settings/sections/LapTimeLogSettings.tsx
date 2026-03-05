@@ -11,11 +11,12 @@ import { SessionVisibility } from '../components/SessionVisibility';
 import { SettingToggleRow } from '../components/SettingToggleRow';
 import { SettingsSection } from '../components/SettingSection';
 import { SettingSliderRow } from '../components/SettingSliderRow';
+import { SettingNumberRow } from '../components/SettingNumberRow';
+import { SettingSelectRow } from '../components/SettingSelectRow';
 
 const SETTING_ID = 'laptimelog';
 
 const defaultConfig: LapTimeLogWidgetSettings['config'] = {
-  enabled: true,
   showLabel: true,
   sessionVisibility: {
     race: true,
@@ -25,6 +26,9 @@ const defaultConfig: LapTimeLogWidgetSettings['config'] = {
     offlineTesting: true,
   },
   background: { opacity: 80 },
+  showOnlyWhenOnTrack: true,
+  maxLapsShow: 7,
+  timeFormat: 'full',
 };
 
 const migrateConfig = (
@@ -34,7 +38,6 @@ const migrateConfig = (
   const config = savedConfig as Record<string, unknown>;
 
   return {
-    enabled: (config.enabled as boolean) ?? defaultConfig.enabled,
     showLabel: (config.showLabel as boolean) ?? defaultConfig.showLabel,
     sessionVisibility:
       (config.sessionVisibility as SessionVisibilitySettings) ??
@@ -42,6 +45,18 @@ const migrateConfig = (
     background: {
       opacity: (config.background as { opacity?: number })?.opacity ?? 0,
     },
+    showOnlyWhenOnTrack:
+      (config.showOnlyWhenOnTrack as boolean) ??
+      defaultConfig.showOnlyWhenOnTrack,
+    maxLapsShow: (config.maxLapsShow as number) ?? defaultConfig.maxLapsShow,
+    timeFormat:
+      (config.timeFormat as
+        | 'full'
+        | 'mixed'
+        | 'minutes'
+        | 'seconds-full'
+        | 'seconds-mixed'
+        | 'seconds') ?? defaultConfig.timeFormat,
   };
 };
 
@@ -108,6 +123,42 @@ export const LapTimeLogSettings = () => {
                   enabled={settings.config.showLabel ?? false}
                   onToggle={(enabled) =>
                     handleConfigChange({ showLabel: enabled })
+                  }
+                />
+
+                <SettingToggleRow
+                  title="Show only when on track"
+                  description="If enabled, relatives will only be shown when driving"
+                  enabled={settings.config.showOnlyWhenOnTrack ?? false}
+                  onToggle={(newValue) =>
+                    handleConfigChange({ showOnlyWhenOnTrack: newValue })
+                  }
+                />
+
+                <SettingNumberRow
+                  title="Max laps show"
+                  description="Max count of laps show in list"
+                  min={1}
+                  max={10}
+                  value={settings.config.maxLapsShow ?? 7}
+                  onChange={(value) =>
+                    handleConfigChange({ maxLapsShow: value })
+                  }
+                />
+                <SettingSelectRow
+                  title="Time format"
+                  description="Time format to show"
+                  value={settings.config.timeFormat ?? 'full'}
+                  options={[
+                    { label: '1:42.123', value: 'full' },
+                    { label: '1:42.1', value: 'mixed' },
+                    { label: '1:42', value: 'minutes' },
+                    { label: '42.123', value: 'seconds-full' },
+                    { label: '42.1', value: 'seconds-mixed' },
+                    { label: '42', value: 'seconds' },
+                  ]}
+                  onChange={(value) =>
+                    handleConfigChange({ timeFormat: value })
                   }
                 />
               </SettingsSection>

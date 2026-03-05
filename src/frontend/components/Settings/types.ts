@@ -622,9 +622,17 @@ export interface ShiftPointSettings {
 export interface LapTimeLogWidgetSettings extends BaseWidgetSettings {
   id: 'laptimelog';
   config: {
-    enabled: boolean;
     showLabel: boolean;
     sessionVisibility: SessionVisibilitySettings;
     background: { opacity: number };
+    showOnlyWhenOnTrack: boolean;
+    maxLapsShow: number;
+    timeFormat:
+      | 'full'
+      | 'mixed'
+      | 'minutes'
+      | 'seconds-full'
+      | 'seconds-mixed'
+      | 'seconds';
   };
 }

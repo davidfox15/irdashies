@@ -22,7 +22,8 @@ export const useLapTimesStoreUpdater = () => {
   const lapTimeLogSettings = useLapTimeLogSettings();
 
   const updateIsActive =
-    standingsSettings?.lapTimeDeltas?.enabled || lapTimeLogSettings?.enabled;
+    standingsSettings?.lapTimeDeltas?.enabled ||
+    lapTimeLogSettings !== undefined;
 
   useEffect(() => {
     if (carIdxLastLapTime && updateIsActive) {

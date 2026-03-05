@@ -15,11 +15,14 @@ export const LapTimeLog = () => {
   const settings = useLapTimeLogSettings();
   const generalSettings = useGeneralSettings();
   const driverCarIdx = useFocusCarIdx();
-  const driverBestLapTime = useTelemetryValue('LapBestLapTime');
-  const driverLapTimeHistory = useDriverLapTimeHistory(driverCarIdx);
 
+  const driverBestLapTime = useTelemetryValue('LapBestLapTime');
+  const isOnTrack = useTelemetryValue('IsOnTrack');
   const sessionNum = useTelemetryValue('SessionNum');
+
+  const driverLapTimeHistory = useDriverLapTimeHistory(driverCarIdx);
   const fastestLaps = useSessionFastestLaps(sessionNum);
+
   const fastestLapInSession = useMemo(
     () =>
       fastestLaps?.[0].CarIdx === driverCarIdx
@@ -27,6 +30,8 @@ export const LapTimeLog = () => {
         : undefined,
     [fastestLaps, driverCarIdx]
   );
+
+  if (settings?.showOnlyWhenOnTrack && !isOnTrack) return null;
 
   const tableBorderSpacing = generalSettings?.compactMode
     ? 'border-spacing-y-0'
@@ -39,7 +44,7 @@ export const LapTimeLog = () => {
         ['--bg-opacity' as string]: `${settings?.background?.opacity ?? 0}%`,
       }}
     >
-      {(settings?.showLabel ?? true) && (
+      {settings?.showLabel && (
         <div className="mb-2 rounded-sm bg-slate-900/70 px-3 py-1.5 text-center text-xs font-semibold uppercase tracking-wide">
           Lap Time Log
         </div>
@@ -50,9 +55,10 @@ export const LapTimeLog = () => {
       >
         {driverLapTimeHistory && (
           <tbody>
-            {driverLapTimeHistory.map((time, index) => {
-              // TODO: add timeFormat select in settings
-              const timeStr = formatTime(time, 'full');
+            {driverLapTimeHistory.toReversed().map((time, index) => {
+              if (index >= settings?.maxLapsShow) return;
+
+              const timeStr = formatTime(time, settings?.timeFormat ?? 'full');
 
               let lapTimeState: LapTimeState = undefined;
               if (driverBestLapTime === time) lapTimeState = 'personal-best';
@@ -62,7 +68,7 @@ export const LapTimeLog = () => {
               return (
                 <LapInfoRow
                   key={index}
-                  lapNumber={index.toString()}
+                  lapNumber={index ? (index + 1).toString() : 'last'}
                   lapTime={timeStr}
                   lapTimeState={lapTimeState}
                 />

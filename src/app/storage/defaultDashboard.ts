@@ -866,7 +866,6 @@ export const defaultDashboard: DashboardLayout = {
         height: 500,
       },
       config: {
-        enabled: true,
         showLabel: true,
         background: { opacity: 80 },
         sessionVisibility: {
@@ -876,6 +875,9 @@ export const defaultDashboard: DashboardLayout = {
           practice: true,
           offlineTesting: true,
         },
+        showOnlyWhenOnTrack: true,
+        maxLapsShow: 7,
+        timeFormat: 'full',
       },
     },
   ],

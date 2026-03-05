@@ -9,7 +9,7 @@ export const LapNumberCell = memo(({ lapNumber }: LapNumberCellProps) => (
     data-column="lapNumber"
     className={`w-auto border-l-4 text-white text-right px-1 whitespace-nowrap`}
   >
-    {`#${lapNumber}`}
+    {`- ${lapNumber}`}
   </td>
 ));
 
