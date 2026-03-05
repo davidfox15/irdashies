@@ -620,7 +620,7 @@ export interface ShiftPointSettings {
 }
 
 export interface LapTimeLogWidgetSettings extends BaseWidgetSettings {
-  id: 'lapTimeLog';
+  id: 'laptimelog';
   config: {
     enabled: boolean;
     showLabel: boolean;

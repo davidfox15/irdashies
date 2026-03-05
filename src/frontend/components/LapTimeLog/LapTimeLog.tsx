@@ -2,7 +2,7 @@ import { useFocusCarIdx, useGeneralSettings } from '@irdashies/context';
 import { useLapTimeLogSettings } from './hooks/useLapTimeLog';
 import { LapInfoRow } from './components/LapInfoRow/LapInfoRow';
 import { formatTime } from '@irdashies/utils/time';
-import { useDriverLapTimeHistory } from 'src/frontend/context/LapTimesStore/LapTimesStore';
+import { useDriverLapTimeHistory } from '../../context/LapTimesStore/LapTimesStore';
 
 export const LapTimeLog = () => {
   const settings = useLapTimeLogSettings();

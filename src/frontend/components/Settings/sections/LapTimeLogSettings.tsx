@@ -12,7 +12,7 @@ import { SettingToggleRow } from '../components/SettingToggleRow';
 import { SettingsSection } from '../components/SettingSection';
 import { SettingSliderRow } from '../components/SettingSliderRow';
 
-const SETTING_ID = 'lapTimeLog';
+const SETTING_ID = 'laptimelog';
 
 const defaultConfig: LapTimeLogWidgetSettings['config'] = {
   enabled: true,
@@ -61,11 +61,11 @@ export const LapTimeLogSettings = () => {
   // Tab state with persistence
   const [activeTab, setActiveTab] = useState<SettingsTabType>(
     () =>
-      (localStorage.getItem('lapTimeLogTab') as SettingsTabType) || 'options'
+      (localStorage.getItem('laptimelogtab') as SettingsTabType) || 'options'
   );
 
   useEffect(() => {
-    localStorage.setItem('lapTimeLogTab', activeTab);
+    localStorage.setItem('laptimelogtab', activeTab);
   }, [activeTab]);
 
   if (!currentDashboard) return <>Loading...</>;

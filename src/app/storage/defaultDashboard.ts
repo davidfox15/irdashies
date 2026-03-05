@@ -857,7 +857,7 @@ export const defaultDashboard: DashboardLayout = {
       },
     },
     {
-      id: 'lapTimeLog',
+      id: 'laptimelog',
       enabled: true,
       layout: {
         x: 378,
