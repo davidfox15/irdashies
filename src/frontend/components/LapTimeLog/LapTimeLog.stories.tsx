@@ -15,7 +15,7 @@ const LapTimeLogWithUpdater = () => {
 
 const meta: Meta<typeof LapTimeLog> = {
   component: LapTimeLog,
-  title: 'widgets/LapTimeLog',
+  title: 'widgets/laptimelog',
 };
 
 export default meta;

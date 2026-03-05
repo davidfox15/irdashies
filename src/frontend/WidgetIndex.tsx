@@ -37,7 +37,7 @@ export const WIDGET_MAP: Record<
   pitlanehelper: PitlaneHelper,
   flag: Flag,
   twitchchat: TwitchChat,
-  lapTimeLog: LapTimeLog,
+  laptimelog: LapTimeLog,
 };
 
 export type WidgetId = keyof typeof WIDGET_MAP;
