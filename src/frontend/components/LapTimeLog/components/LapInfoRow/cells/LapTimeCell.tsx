@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-type LapTimeState = 'session-fastest' | 'personal-best' | undefined;
+export type LapTimeState = 'session-fastest' | 'personal-best' | undefined;
 
 interface LastTimeCellProps {
   lapTimeString: string;
