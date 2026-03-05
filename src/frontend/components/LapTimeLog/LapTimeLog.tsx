@@ -7,7 +7,10 @@ import {
 import { useLapTimeLogSettings } from './hooks/useLapTimeLog';
 import { LapInfoRow } from './components/LapInfoRow/LapInfoRow';
 import { formatTime } from '@irdashies/utils/time';
-import { useDriverLapTimeHistory } from '../../context/LapTimesStore/LapTimesStore';
+import {
+  useDriverLapTimeHistory,
+  useDriverSectorHistory,
+} from '../../context/LapTimesStore/LapTimesStore';
 import { useMemo } from 'react';
 import { LapTimeState } from './components/LapInfoRow/cells/LapTimeCell';
 
@@ -21,12 +24,13 @@ export const LapTimeLog = () => {
   const sessionNum = useTelemetryValue('SessionNum');
 
   const driverLapTimeHistory = useDriverLapTimeHistory(driverCarIdx);
+  const driverSectorHistory = useDriverSectorHistory(driverCarIdx);
   const fastestLaps = useSessionFastestLaps(sessionNum);
 
   const fastestLapInSession = useMemo(
     () =>
-      fastestLaps?.[0].CarIdx === driverCarIdx
-        ? fastestLaps?.[0].FastestTime
+      fastestLaps?.[0]?.CarIdx === driverCarIdx
+        ? fastestLaps?.[0]?.FastestTime
         : undefined,
     [fastestLaps, driverCarIdx]
   );
@@ -36,6 +40,9 @@ export const LapTimeLog = () => {
   const tableBorderSpacing = generalSettings?.compactMode
     ? 'border-spacing-y-0'
     : 'border-spacing-y-0.5';
+  const maxLapsToShow = settings?.maxLapsShow ?? 7;
+  const lapHistoryReversed = driverLapTimeHistory.toReversed();
+  const sectorHistoryReversed = driverSectorHistory.toReversed();
 
   return (
     <div
@@ -55,10 +62,19 @@ export const LapTimeLog = () => {
       >
         {driverLapTimeHistory && (
           <tbody>
-            {driverLapTimeHistory.toReversed().map((time, index) => {
-              if (index >= settings?.maxLapsShow) return;
+            {lapHistoryReversed.map((time, index) => {
+              if (index >= maxLapsToShow) return null;
 
               const timeStr = formatTime(time, settings?.timeFormat ?? 'full');
+              const sectorLap = sectorHistoryReversed[index];
+              const sectors =
+                sectorLap && sectorLap.length === 3
+                  ? sectorLap
+                      .map((sectorTime) =>
+                        formatTime(sectorTime, 'seconds-mixed')
+                      )
+                      .join(' | ')
+                  : undefined;
 
               let lapTimeState: LapTimeState = undefined;
               if (driverBestLapTime === time) lapTimeState = 'personal-best';
@@ -71,6 +87,7 @@ export const LapTimeLog = () => {
                   lapNumber={index ? (index + 1).toString() : 'last'}
                   lapTime={timeStr}
                   lapTimeState={lapTimeState}
+                  sectors={sectors}
                 />
               );
             })}

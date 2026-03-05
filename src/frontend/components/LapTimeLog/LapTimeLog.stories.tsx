@@ -2,9 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TelemetryDecoratorWithConfig } from '@irdashies/storybook';
 import { LapTimeLog } from './LapTimeLog';
 import { useLapTimesStoreUpdater } from '../../context/LapTimesStore/LapTimesStoreUpdater';
+import { useSectorTimesStoreUpdater } from '../../context/LapTimesStore/SectorTimesStoreUpdater';
 
 const LapTimeLogWithUpdater = () => {
   useLapTimesStoreUpdater();
+  useSectorTimesStoreUpdater();
 
   return (
     <div className="h-[280px] w-[320px]">

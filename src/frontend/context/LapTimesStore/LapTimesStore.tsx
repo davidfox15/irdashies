@@ -9,9 +9,15 @@ export interface LapTimeBuffer {
 interface LapTimesState {
   lapTimeBuffer: LapTimeBuffer | null;
   lapTimes: number[];
+  driverSectorHistory: number[][][];
   sessionNum: number | null;
   updateLapTimes: (
     carIdxLastLapTime: number[],
+    sessionNum: number | null
+  ) => void;
+  addDriverSectorLap: (
+    driverCarIdx: number,
+    sectorLap: number[],
     sessionNum: number | null
   ) => void;
   reset: () => void;
@@ -19,6 +25,7 @@ interface LapTimesState {
 
 const LAP_TIME_AVG_WINDOW = 5; // Average over last 5 laps
 const OUTLIER_THRESHOLD = 1.0; // Outlier detection threshold
+const SECTOR_HISTORY_WINDOW = 20;
 
 // Helper function to calculate median
 function median(numbers: number[]): number {
@@ -61,6 +68,7 @@ function filterOutliers(lapTimes: number[]): number[] {
 export const useLapTimesStore = create<LapTimesState>((set, get) => ({
   lapTimeBuffer: null,
   lapTimes: [],
+  driverSectorHistory: [],
   sessionNum: null,
   updateLapTimes: (carIdxLastLapTime, sessionNum) => {
     const { lapTimeBuffer, sessionNum: prevSessionNum } = get();
@@ -75,6 +83,7 @@ export const useLapTimesStore = create<LapTimesState>((set, get) => ({
       set({
         lapTimeBuffer: null,
         lapTimes: [],
+        driverSectorHistory: [],
         sessionNum,
       });
       return;
@@ -137,11 +146,45 @@ export const useLapTimesStore = create<LapTimesState>((set, get) => ({
       sessionNum,
     });
   },
+  addDriverSectorLap: (driverCarIdx, sectorLap, sessionNum) => {
+    if (driverCarIdx < 0 || sectorLap.length < 3) return;
+
+    const { sessionNum: prevSessionNum } = get();
+    if (
+      prevSessionNum !== null &&
+      sessionNum !== null &&
+      sessionNum !== prevSessionNum
+    ) {
+      set({
+        lapTimeBuffer: null,
+        lapTimes: [],
+        driverSectorHistory: [],
+        sessionNum,
+      });
+      return;
+    }
+
+    set((state) => {
+      const nextHistory = [...state.driverSectorHistory];
+      const currentDriverHistory = nextHistory[driverCarIdx] ?? [];
+      const trimmedHistory = [...currentDriverHistory, sectorLap].slice(
+        -SECTOR_HISTORY_WINDOW
+      );
+
+      nextHistory[driverCarIdx] = trimmedHistory;
+
+      return {
+        driverSectorHistory: nextHistory,
+        sessionNum,
+      };
+    });
+  },
   reset: () => {
     console.log('[LapTimesStore] Resetting lap time history');
     set({
       lapTimeBuffer: null,
       lapTimes: [],
+      driverSectorHistory: [],
       sessionNum: null,
     });
   },
@@ -155,6 +198,7 @@ export const useLapTimes = (): number[] =>
 
 // Stable empty array reference to prevent unnecessary re-renders
 const EMPTY_LAP_HISTORY: number[][] = [];
+const EMPTY_SECTOR_HISTORY: number[][] = [];
 
 // Track the last version seen to enable O(1) equality checks
 let lastSeenVersion = -1;
@@ -189,3 +233,10 @@ export const useDriverLapTimeHistory = (driverCarIdx?: number): number[] => {
     return lapTimeHistory[driverCarIdx];
   return [];
 };
+
+export const useDriverSectorHistory = (driverCarIdx?: number): number[][] =>
+  useStore(useLapTimesStore, (state) => {
+    if (driverCarIdx === undefined || driverCarIdx < 0)
+      return EMPTY_SECTOR_HISTORY;
+    return state.driverSectorHistory[driverCarIdx] ?? EMPTY_SECTOR_HISTORY;
+  });

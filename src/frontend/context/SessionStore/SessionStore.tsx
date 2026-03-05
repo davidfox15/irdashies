@@ -101,6 +101,13 @@ export const useSessionFastestLaps = (sessionNum: number | undefined) =>
     arrayShallowCompare
   );
 
+export const useSessionSplitSectors = () =>
+  useStoreWithEqualityFn(
+    useSessionStore,
+    (state) => state.session?.SplitTimeInfo?.Sectors,
+    arrayShallowCompare
+  );
+
 export const useSessionQualifyingResults = () =>
   useStoreWithEqualityFn(
     useSessionStore,

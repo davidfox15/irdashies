@@ -17,9 +17,11 @@ vi.mock('../SessionStore/SessionStore', () => ({
 const mockLapTimesState = {
   lapTimeBuffer: null,
   lapTimes: [],
+  driverSectorHistory: [],
   sessionNum: null,
   playerCarIdx: null,
   updateLapTimes: vi.fn(),
+  addDriverSectorLap: vi.fn(),
   reset: vi.fn(),
 };
 
@@ -30,7 +32,7 @@ describe('useCarIdxAverageLapTime', () => {
   });
 
   it('should return empty array when no session data', () => {
-    vi.mocked(useLapTimesStore).mockImplementation((selector) => 
+    vi.mocked(useLapTimesStore).mockImplementation((selector) =>
       selector(mockLapTimesState)
     );
     vi.mocked(useLapTimes).mockReturnValue([]);
@@ -42,12 +44,12 @@ describe('useCarIdxAverageLapTime', () => {
 
   it('should use class lap time as fallback when no lap time available', () => {
     const mockDrivers = {
-      0: 90.5, 
+      0: 90.5,
       1: 91.2,
     };
 
     vi.mocked(useCarIdxClassEstLapTime).mockReturnValue(mockDrivers);
-    vi.mocked(useLapTimesStore).mockImplementation((selector) => 
+    vi.mocked(useLapTimesStore).mockImplementation((selector) =>
       selector(mockLapTimesState)
     );
     vi.mocked(useLapTimes).mockReturnValue([0, 0]);
@@ -57,10 +59,10 @@ describe('useCarIdxAverageLapTime', () => {
   });
 
   it('should use actual lap times when available', () => {
-    const mockDrivers = {0: 90.5, 1: 91.2};
+    const mockDrivers = { 0: 90.5, 1: 91.2 };
 
     vi.mocked(useCarIdxClassEstLapTime).mockReturnValue(mockDrivers);
-    vi.mocked(useLapTimesStore).mockImplementation((selector) => 
+    vi.mocked(useLapTimesStore).mockImplementation((selector) =>
       selector(mockLapTimesState)
     );
     vi.mocked(useLapTimes).mockReturnValue([89.8, 90.1]);
@@ -71,7 +73,7 @@ describe('useCarIdxAverageLapTime', () => {
 
   it('should read lap times from store', () => {
     vi.mocked(useCarIdxClassEstLapTime).mockReturnValue({});
-    vi.mocked(useLapTimesStore).mockImplementation((selector) => 
+    vi.mocked(useLapTimesStore).mockImplementation((selector) =>
       selector(mockLapTimesState)
     );
     vi.mocked(useLapTimes).mockReturnValue([89.8, 90.1]);
@@ -81,10 +83,10 @@ describe('useCarIdxAverageLapTime', () => {
   });
 
   it('should handle mixed known and unknown lap times', () => {
-    const mockDrivers = {0: 90.5, 1: 91.2};
+    const mockDrivers = { 0: 90.5, 1: 91.2 };
 
     vi.mocked(useCarIdxClassEstLapTime).mockReturnValue(mockDrivers);
-    vi.mocked(useLapTimesStore).mockImplementation((selector) => 
+    vi.mocked(useLapTimesStore).mockImplementation((selector) =>
       selector(mockLapTimesState)
     );
     vi.mocked(useLapTimes).mockReturnValue([89.8, 0]);
@@ -94,10 +96,10 @@ describe('useCarIdxAverageLapTime', () => {
   });
 
   it('should handle missing car indices in session data', () => {
-    const mockDrivers = {1: 91.2};
+    const mockDrivers = { 1: 91.2 };
 
     vi.mocked(useCarIdxClassEstLapTime).mockReturnValue(mockDrivers);
-    vi.mocked(useLapTimesStore).mockImplementation((selector) => 
+    vi.mocked(useLapTimesStore).mockImplementation((selector) =>
       selector(mockLapTimesState)
     );
     vi.mocked(useLapTimes).mockReturnValue([0, 0]);
@@ -105,4 +107,4 @@ describe('useCarIdxAverageLapTime', () => {
     const { result } = renderHook(() => useCarIdxAverageLapTime());
     expect(result.current).toEqual([-1, 91.2]);
   });
-}); 
+});
